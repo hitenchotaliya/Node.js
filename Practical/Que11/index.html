@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Live Cricket Score</title>
+  </head>
+  <body>
+    <h1>Live Cricket Score</h1>
+    <table>
+      <tr>
+        <th>Player Name</th>
+        <th>Score (Runs)</th>
+      </tr>
+      <tr id="player1">
+        <td>Player 1</td>
+        <td id="player1-score">0</td>
+      </tr>
+      <tr id="player2">
+        <td>Player 2</td>
+        <td id="player2-score">0</td>
+      </tr>
+    </table>
+
+    <script>
+      const player1ScoreElement = document.getElementById('player1-score');
+      const player2ScoreElement = document.getElementById('player2-score');
+
+      // Create a WebSocket connection
+      const ws = new WebSocket('ws://localhost:8080');
+
+      // Handle messages from the server
+      ws.onmessage = event => {
+        const { player1, player2 } = JSON.parse(event.data);
+        player1ScoreElement.textContent = player1;
+        player2ScoreElement.textContent = player2;
+      };
+    </script>
+  </body>
+</html>

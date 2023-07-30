@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chatbot Module</title>
+</head>
+<body>
+    <h1>Chatbot Module</h1>
+
+    <input type="text" id="messageInput" placeholder="Type your message">
+    <button onclick="sendMessage()">Send</button>
+
+    <div id="chatLog"></div>
+
+    <script>
+        const socket = new WebSocket('ws://localhost:8080');
+        const messageInput = document.getElementById('messageInput');
+        const chatLog = document.getElementById('chatLog');
+
+        socket.addEventListener('open', (event) => {
+            logMessage('Connected to server');
+        });
+
+        socket.addEventListener('message', (event) => {
+            logMessage('Chatbot says: ' + event.data);
+        });
+
+        function sendMessage() {
+            const message = messageInput.value;
+            socket.send(message);
+            logMessage('You: ' + message);
+            messageInput.value = '';
+        }
+
+        function logMessage(message) {
+            const messageElement = document.createElement('p');
+            messageElement.textContent = message;
+            chatLog.appendChild(messageElement);
+        }
+    </script>
+</body>
