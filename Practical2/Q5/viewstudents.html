@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <style>
+    form {
+      display: flex;
+      flex-direction: column;
+      width: 300px;
+      margin: auto;
+    }
+
+    label {
+      margin-top: 10px;
+      margin-bottom: 5px;
+    }
+
+    input {
+      padding: 5px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: none;
+      box-shadow: 0 0 5px gray;
+    }
+
+    input[type="submit"] {
+      background-color: blue;
+      color: white;
+      padding: 10px;
+      cursor: pointer;
+    }
+
+    input[type="file"] {
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <form id="form" method="post" enctype="multipart/form-data">
+    <label for="name">Name:</label>
+    <input type="text" id="name" value="name" name="name">
+
+    <label for="email">Email:</label>
+    <input type="email" id="email" value="email" name="email">
+
+    <label for="phone">phone Number:</label>
+    <input type="phone" id="phone" name="phone" value="{{records.phone}}">
+
+    <label for="address">address:</label>
+    <textarea type="address" id="address" name="address"> </textarea>
+
+
+   
+    <input type="submit" value="Register">
+    <a href="/Update"></a>
+  </form>
+
+  <script>
+    const url = new URLSearchParams(window.location.search);
+    const id = url.get("id");
+
+    $.ajax({
+      type: "GET",
+      url: `http://localhost:8000/viewStudent/${id}`,
+      success: (data) => {
+        console.log(data);
+        $("#name").val(data.data.name);
+        $("#email").val(data.data.email);
+        $("#phone").val(data.data.phone);
+
+        $("textarea").html(data.data.address);
+
+      },
+    });
+//     $("#form").submit((e) => {
+//   e.preventDefault();
+//   const imageFiles = [];
+  
+//   // Get the file input element
+//   const fileInput = $("#firm-image")[0];
+
+//   // Check if files were selected
+//   if (fileInput.files.length > 0) {
+//     // Add each selected file to the imageFiles array
+//     for (let i = 0; i < fileInput.files.length; i++) {
+//       imageFiles.push(fileInput.files[i]);
+//     }
+//   }
+
+//   const formdata = new FormData();
+//   formdata.append("name", $("#name").val());
+//   formdata.append("phone", $("#phone").val());
+//   formdata.append("email", $("#email").val());
+//   formdata.append("address", $("textarea").val());
+  
+//   // Append each image file to the FormData object
+//   imageFiles.forEach((file, index) => {
+//     formdata.append(`Images[${index}]`, file);
+//   });
+//   console.log("🚀 ~ file: viewstudents.html:100 ~ $ ~ formdata:", formdata)
+
+//   $.ajax({
+//     type: "POST",
+//     url: "http://localhost:8000/updateStudent/" + id,
+//     data: formdata,
+//     processData: false, // Don't process the data
+//     contentType: false, // Let jQuery handle the content type
+//     success: () => {
+//       console.log("Data added successfully");
+//     },
+//     error: (xhr, status, error) => {
+//       console.error("Error:", error);
+//     },
+//   });
+// });
+
+   
+
+    $("#form").submit((e) => {
+      e.preventDefault();
+     
+
+      const formdata = {
+        name: $("#name").val(),
+        phone: $("#phone").val(),
+        email: $("#email").val(),
+        address: $("textarea").val(),
+      
+
+      };
+      console.log("🚀 ~ file: viewstudents.html:110 ~ $ ~ formdata:", formdata)
+      
+      $.ajax({
+        type: "POST",
+        url: "http://localhost:8000/updateStudent/" + id,
+       
+        data: JSON.stringify(formdata),
+        contentType: "application/json",
+        success: () => {
+          console.log("data added successfully");
+          
+        },
+      });
+    });
+  </script>
+
+
+</body>
+
+</html>

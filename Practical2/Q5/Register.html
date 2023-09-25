@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <style>form {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  margin: auto;
+}
+
+label {
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+input {
+  padding: 5px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: none;
+  box-shadow: 0 0 5px gray;
+}
+
+input[type="submit"] {
+  background-color: blue;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+}
+
+input[type="file"] {
+  margin-bottom: 20px;
+}</style>
+</head>
+<body>
+    <form method="post"  enctype="multipart/form-data" id="registrationForm">
+  <label for="name">Name:</label>
+  <input type="text" id="name" name="name" required> 
+
+  <label for="email">Email:</label>
+  <input type="email" id="email" name="email" required> 
+
+   <label for="phone">phone Number:</label>
+  <input type="phone" id="phone" name="phone" required> 
+
+   <label for="address">address:</label>
+  <textarea type="address" id="address" name="address" required> </textarea>
+
+  <label for="password">Password:</label>
+  <input type="password" id="password" name="password" required> 
+
+  <label for="confirm-password">Confirm Password:</label>
+  <input type="password" id="confirm-password" name="confpassword" required> 
+
+  <label for="firm-image">Firm Image:</label>
+  <input type="file" id="firm-image" name="Images" accept="image/*" multiple> 
+
+  <input type="submit" value="Register">
+  <a href="/Register"></a>
+</form>
+
+<script>
+    
+        // Add a submit event handler for the form
+        $("#registrationForm").submit(function (e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            // Make an AJAX request to submit the form data
+            $.ajax({
+                url: "http://localhost:8000/registerstud",
+                method: "POST",
+                data: new FormData(this),
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function (response) {
+                    // Check if registration was successful
+                    if (response.status == 201) {
+                        // Redirect to the login page
+                        window.location.href = "/Logins.html";
+                    } else {
+                        // Handle registration failure (e.g., display an error message)
+                        alert("Registration failed: " + response.message);
+                    }
+                },
+                error: function () {
+                    // Handle AJAX request error
+                    alert("An error occurred during registration.");
+                }
+            });
+        });
+ 
+</script>
+</body>
+</html>
